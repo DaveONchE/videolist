@@ -17,14 +17,6 @@ if (!$items) {
 	return;
 }
 
-// if all five of the items have empty thumbnails, we need to upgrade
-foreach ($items as $item) {
-	if ($item->thumbnail === true) {
-		return;
-	}
-}
-
-
 /**
  * Downloads the thumbnail and saves into data folder
  *
