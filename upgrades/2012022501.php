@@ -7,7 +7,7 @@
 
 $items = elgg_get_entities(array(
 	'type' => 'object',
-	'subtype' => 'videolist_item',
+	'subtype' => 'videolist',
 	'limit' => 5,
 	'order_by' => 'e.time_created asc',
 ));
@@ -32,12 +32,9 @@ foreach ($items as $item) {
  * @return bool
  */
 function videolist_2012022501($item) {
+	require_once(elgg_get_plugins_path() . 'upgrade-tools/lib/upgrade_tools.php');
 
-	// do not upgrade videos that have already been upgraded
-	if ($item->thumbnail === true) {
-		return true;
-	}
-
+	// get thumbnail image
 	$thumbnail = file_get_contents($item->thumbnail);
 	if (!$thumbnail) {
 		return false;
@@ -51,14 +48,27 @@ function videolist_2012022501($item) {
 	$filehandler->write($thumbnail);
 	$filehandler->close();
 	
-	$item->thumbnail = true;
+	// update properties
+	if ($item->url) {
+		$item->video_url = $item->url;
+		$item->deleteMetadata('url');
+	}
+	if ($item->desc) {
+		$item->description = $item->desc;
+		$item->deleteMetadata('desc');
+		$item->save();
+	}
+	if ($item->embedurl) {
+		$item->deleteMetadata('embedurl');
+	}
+	upgrade_change_subtype($item, 'videolist_item');
 	return true;
 }
 
 $previous_access = elgg_set_ignore_access(true);
 $options = array(
 	'type' => 'object',
-	'subtype' => 'videolist_item',
+	'subtype' => 'videolist',
 	'limit' => 0,
 );
 $batch = new ElggBatch('elgg_get_entities', $options, 'videolist_2012022501', 100);

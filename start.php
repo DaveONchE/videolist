@@ -313,10 +313,8 @@ function videolist_preprocess_url($hook, $type, $returnvalue, $params) {
 /**
  * Process upgrades for the videolist plugin
  */
-function videolist_run_upgrades() {
-	$path = elgg_get_plugins_path() . 'videolist/upgrades/';
-	$files = elgg_get_upgrade_files($path);
-	foreach ($files as $file) {
-		include "$path{$file}";
+function videolist_run_upgrades($event, $type, $details) {
+	if (include_once(elgg_get_plugins_path() . 'upgrade-tools/lib/upgrade_tools.php')) {
+		upgrade_module_run('videolist');
 	}
 }
