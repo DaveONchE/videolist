@@ -54,6 +54,16 @@ function videolist_2012022501($item) {
 		$item->deleteMetadata('embedurl');
 	}
 	upgrade_change_subtype($item, 'videolist_item');
+
+	// update river
+	$options = array('object_guid' => $item->guid);
+	$river_items = elgg_get_river($options);
+	foreach($river_items as $river_item) {
+		if ($river_item->action_type == 'create') {
+			upgrade_update_river($river_item->id, 'river/object/videolist_item/create', $item->guid, 0);
+		}
+	}
+
 	return true;
 }
 
