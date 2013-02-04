@@ -64,10 +64,12 @@ if ($full && !elgg_in_context('gallery')) {
     $dimensions = elgg_get_config('videolist_dimensions');
 	$content = elgg_view("videolist/watch/{$entity->videotype}", array(
 		'entity' => $entity,
-		'width' => (int) $dimensions['width'],
-		'height' => (int) $dimensions['height'],
+//		'width' => (int) $dimensions['width'],
+//		'height' => (int) $dimensions['height'],
+		'width' => '420',
+		'height' => '315',
 	));
-	$content = "<div class=\"videolist-watch\">$content</div>";
+	$content = "<div style=\"width:100%\" class=\"videolist-watch\">$content</div>";
 
 	$params = array(
 		'entity' => $entity,

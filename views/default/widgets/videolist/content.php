@@ -18,9 +18,13 @@ $options = array(
 $content = elgg_list_entities($options);
 
 echo $content;
-
+$owner_entity = elgg_get_page_owner_entity();
 if ($content) {
-	$url = "pages/owner/" . elgg_get_page_owner_entity()->username;
+	if ($owner_entity instanceof ElggGroup){
+		$url = "pages/group/" . $owner_entity->guid;
+	} else {
+		$url = "pages/owner/" . elgg_get_page_owner_entity()->username;
+	}
 	$more_link = elgg_view('output/url', array(
 		'href' => $url,
 		'text' => elgg_echo('videolist:more'),
