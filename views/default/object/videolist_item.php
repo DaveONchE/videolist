@@ -69,7 +69,7 @@ if ($full && !elgg_in_context('gallery')) {
 		'width' => '420',
 		'height' => '315',
 	));
-	$content = "<div style=\"width:100%\" class=\"videolist-watch\">$content</div>";
+	$content = "<div style=\"width:100%;margin-left:0;margin-top:20px;\" class=\"videolist-watch\">$content</div>";
 
 	$params = array(
 		'entity' => $entity,

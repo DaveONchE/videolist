@@ -5,6 +5,7 @@
 ?>
 
 .videolist-watch {
-	margin-top: 40px;
-	margin-left: 20px;
+	margin-top: 20px;
+	margin-left: 0px;
+	right: 0px;
 }
