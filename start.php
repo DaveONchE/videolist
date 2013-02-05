@@ -12,7 +12,7 @@
 elgg_register_event_handler('init', 'system', 'videolist_init');
 
 function videolist_init() {
-	
+
 	elgg_register_library('elgg:videolist', elgg_get_plugins_path() . 'videolist/lib/videolist.php');
 
 	// add a site navigation item
@@ -22,9 +22,13 @@ function videolist_init() {
 	// Extend system CSS with our own styles
 	elgg_extend_view('css/elgg','videolist/css');
 
+	// Extend with river likes and dislikes
+	elgg_extend_view('river/object/videolist_item/create', 'likes/river/item');
+	elgg_extend_view('river/object/videolist_item/create', 'dislikes/river/item');
+
 	// Register a page handler, so we can have nice URLs
 	elgg_register_page_handler('videolist', 'videolist_page_handler');
-	
+
 	// Language short codes must be of the form "videolist:key"
 	// where key is the array key below
 	elgg_set_config('videolist', array(
@@ -34,7 +38,7 @@ function videolist_init() {
 		'tags' => 'tags',
 		'access_id' => 'access',
 	));
-	
+
 	elgg_set_config('videolist_dimensions', array(
 		'width'  => 600,
 		'height' => 400,
@@ -43,13 +47,13 @@ function videolist_init() {
 	// add to groups
 	add_group_tool_option('videolist', elgg_echo('groups:enablevideolist'), true);
 	elgg_extend_view('groups/tool_latest', 'videolist/group_module');
-	
+
 	//add a widget
 	elgg_register_widget_type('videolist', elgg_echo('videolist'), elgg_echo('videolist:widget:description'));
 	elgg_register_widget_type('videolist', elgg_echo('videolist'), elgg_echo('videolist:widget:description'),"groups,profile"); 
 	// Register granular notification for this type
 	register_notification_object('object', 'videolist_item', elgg_echo('videolist:new'));
-	
+
 	// Register entity type for search
 	elgg_register_entity_type('object', 'videolist_item');
 
@@ -69,13 +73,13 @@ function videolist_init() {
 
     // handle URLs without scheme
     elgg_register_plugin_hook_handler('videolist:preprocess', 'url', 'videolist_preprocess_url');
-	
+
 	// Register actions
 	$actions_path = elgg_get_plugins_path() . "videolist/actions/videolist";
 	elgg_register_action("videolist/add", "$actions_path/add.php");
 	elgg_register_action("videolist/edit", "$actions_path/edit.php");
 	elgg_register_action("videolist/delete", "$actions_path/delete.php");
-	
+
 	elgg_register_event_handler('upgrade', 'system', 'videolist_run_upgrades');
 }
 
@@ -97,7 +101,7 @@ function videolist_init() {
  * @return NULL
  */
 function videolist_page_handler($page) {
-	
+
 	if (!isset($page[0])) {
 		$page[0] = 'all';
 	}
@@ -282,7 +286,7 @@ function videolist_icon_url_override($hook, $type, $returnvalue, $params) {
     if($videolist_item->getSubtype() != 'videolist_item'){
 		return $returnvalue;
 	}
-	
+
 	// tiny thumbnails are too small to be useful, so give a generic video icon
 	if ($size != 'tiny' && isset($videolist_item->thumbnail)) {
 		return elgg_get_site_url() . "mod/videolist/thumbnail.php?guid=" . $videolist_item->guid;

@@ -10,7 +10,7 @@ $english = array(
 	/**
 	 * Menu items and titles
 	 */
-
+	'item:object:videolist' => "Videos",
 	'videolist' => "Videos",
 	'videolist:owner' => "%s's videos",
 	'videolist:friends' => "Friends' videos",
